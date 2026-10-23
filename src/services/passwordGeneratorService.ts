@@ -76,7 +76,8 @@ export class PasswordGeneratorService {
    * Obtiene un carácter aleatorio síncrono para caracteres garantizados
    */
   private static getRandomChar(source: string): string {
-    const randomIndex = Math.floor(Math.random() * source.length);
+    const randomByte = Crypto.getRandomValues(new Uint8Array(1))[0];
+    const randomIndex = randomByte % source.length;
     return source.charAt(randomIndex);
   }
 
