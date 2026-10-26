@@ -224,7 +224,7 @@ export const VaultScreen: React.FC = () => {
               },
             ]}
           >
-            <Ionicons name="add" size={28} color="#FFFFFF" />
+            <Ionicons name="add" size={28} color={isDark ? "#FFFFFF" : "#000000"} />
           </Pressable>
         </View>
       )}

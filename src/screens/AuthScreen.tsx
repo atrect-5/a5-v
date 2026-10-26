@@ -205,7 +205,7 @@ export const AuthScreen: React.FC = () => {
               <CustomButton
                 title={`Desbloquear con ${biometricType}`}
                 onPress={handleBiometricUnlock}
-                variant="outline"
+                variant="secondary"
                 icon="finger-print-outline"
                 size="md"
               />

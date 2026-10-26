@@ -95,7 +95,7 @@ export const SettingsScreen: React.FC = () => {
               </View>
               <View>
                 <Text style={[styles.settingTitle, { color: theme.text }]}>
-                  {isDark ? 'Tema Oscuro (Morado)' : 'Tema Claro (Azul)'}
+                  {isDark ? 'Tema Oscuro' : 'Tema Claro'}
                 </Text>
                 <Text style={[styles.settingDesc, { color: theme.textMuted }]}>
                   {isDark
@@ -150,7 +150,7 @@ export const SettingsScreen: React.FC = () => {
             ]}
           >
             <View style={styles.settingInfo}>
-              <View style={[styles.iconBox, { backgroundColor: isDark ? theme.cardSecondary : theme.primaryLight }]}>
+              <View style={[styles.iconBox, { backgroundColor: isDark ? theme.cardSecondary : theme.primaryLight }, { marginTop: 20 }, { marginBottom: 20 }]}>
                 <Ionicons name="key" size={20} color={theme.primary} />
               </View>
               <View>
@@ -162,7 +162,7 @@ export const SettingsScreen: React.FC = () => {
                 </Text>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={18} color={theme.textMuted} />
+
           </Pressable>
         </View>
 

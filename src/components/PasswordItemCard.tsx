@@ -90,6 +90,7 @@ export const PasswordItemCard: React.FC<PasswordItemCardProps> = ({ item, onPres
               name={showPassword ? 'eye-off-outline' : 'eye-outline'}
               size={18}
               color={theme.textSecondary}
+              style={{ marginRight: 10 }}
             />
           </Pressable>
 
@@ -145,7 +146,7 @@ export const PasswordItemCard: React.FC<PasswordItemCardProps> = ({ item, onPres
             style={{ marginRight: 4 }}
           />
           <Text style={[styles.copyUserText, { color: copiedUser ? theme.success : theme.textSecondary }]}>
-            {copiedUser ? 'Copiado' : 'Usuario'}
+            {copiedUser ? 'Copiado' : 'Copiar usuario'}
           </Text>
         </Pressable>
       </View>
