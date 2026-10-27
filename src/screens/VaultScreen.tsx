@@ -16,6 +16,7 @@ import { HeaderBar } from '../components/HeaderBar';
 import { PasswordItemCard } from '../components/PasswordItemCard';
 import { PasswordModal } from '../components/PasswordModal';
 import { CustomButton } from '../components/CustomButton';
+import { colors } from '@/theme/colors';
 
 export const VaultScreen: React.FC = () => {
   const { theme, isDark } = useThemeStore();
@@ -212,19 +213,13 @@ export const VaultScreen: React.FC = () => {
 
       {/* Botón flotante para agregar contraseña */}
       {filteredPasswords.length > 0 && (
-        <View style={styles.fabContainer}>
+        <View style={[styles.fabContainer, { backgroundColor: theme.primary }]}>
           <Pressable
             onPress={handleOpenCreate}
-            style={({ pressed }) => [
-              styles.fabButton,
-              {
-                backgroundColor: theme.primary,
-                opacity: pressed ? 0.8 : 1,
-                transform: [{ scale: pressed ? 0.94 : 1 }],
-              },
-            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Agregar nueva contraseña"
           >
-            <Ionicons name="add" size={28} color={isDark ? "#FFFFFF" : "#000000"} />
+            <Ionicons name="add" size={35} color={theme.primaryLight} />
           </Pressable>
         </View>
       )}
@@ -307,17 +302,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 20,
-  },
-  fabButton: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    borderRadius: 20,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 8,
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    width: 60,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 6,
-  },
+  }
 });

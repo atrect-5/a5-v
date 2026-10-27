@@ -91,7 +91,7 @@ export const GeneratorScreen: React.FC = () => {
                 },
               ]}
             >
-              <Ionicons name="refresh" size={20} color={theme.primary} />
+              <Ionicons name="refresh" size={20} color={theme.primary} style={{ marginRight: 50 }} />
             </Pressable>
 
             {/* Botón Copiar al Portapapeles con feedback */}
@@ -107,13 +107,9 @@ export const GeneratorScreen: React.FC = () => {
             >
               <Ionicons
                 name={copied ? 'checkmark-circle' : 'copy-outline'}
-                size={18}
-                color="#FFFFFF"
-                style={{ marginRight: 6 }}
+                size={20}
+                color={copied ? theme.success : theme.primary}
               />
-              <Text style={styles.copyButtonText}>
-                {copied ? '¡Copiado!' : 'Copiar'}
-              </Text>
             </Pressable>
           </View>
         </View>
