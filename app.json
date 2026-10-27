@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "gestor-passwords",
-    "slug": "gestor-passwords",
+    "name": "a5-v",
+    "slug": "a5-v",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icoa5.png",
@@ -15,7 +15,7 @@
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.passatrect"
+      "package": "com.anonymous.a5v"
     },
     "web": {
       "favicon": "./assets/favicon.png"
