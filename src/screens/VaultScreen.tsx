@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  Alert,
-} from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, Pressable, Alert, Platform } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useVaultStore } from '../store/useVaultStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { PasswordItem } from '../types';
@@ -140,32 +134,38 @@ export const VaultScreen: React.FC = () => {
           showsHorizontalScrollIndicator={false}
           data={categories}
           keyExtractor={(item) => item.label}
-          contentContainerStyle={{ paddingHorizontal: 20 }}
+          contentContainerStyle={{ paddingHorizontal: 20, gap: 10, alignItems: 'center' }}
           renderItem={({ item }) => {
             const isSelected = selectedCategory === item.id;
             return (
               <Pressable
                 onPress={() => setSelectedCategory(item.id)}
                 style={({ pressed }) => [
-                  styles.filterChip,
                   {
-                    backgroundColor: isSelected ? theme.primary : theme.card,
-                    borderColor: isSelected ? theme.primary : theme.border,
-                    opacity: pressed ? 0.7 : 1,
+                    opacity: pressed ? 0.85 : 1,
+                    transform: [{ scale: pressed ? 0.95 : 1 }],
                   },
                 ]}
               >
-                <Text
-                  style={[
-                    styles.filterChipText,
-                    {
-                      color: isSelected ? '#FFFFFF' : theme.textSecondary,
-                      fontWeight: isSelected ? '700' : '500',
-                    },
-                  ]}
-                >
-                  {item.label}
-                </Text>
+                {isSelected ? (
+                  <LinearGradient
+                    colors={[theme.primary, theme.accent]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.gradientChipSelected}
+                  >
+                    <Text style={[styles.filterChipText, styles.filterChipTextSelected]}>
+                      {item.label}
+                    </Text>
+                  </LinearGradient>
+                ) : (
+                  <View
+                    style={[styles.filterChip, { backgroundColor: theme.cardSecondary }]}>
+                    <Text style={[styles.filterChipText, { color: theme.textSecondary }]}>
+                      {item.label}
+                    </Text>
+                  </View>
+                )}
               </Pressable>
             );
           }}
@@ -213,13 +213,24 @@ export const VaultScreen: React.FC = () => {
 
       {/* Botón flotante para agregar contraseña */}
       {filteredPasswords.length > 0 && (
-        <View style={[styles.fabContainer, { backgroundColor: theme.primary }]}>
+        <View style={[styles.fabContainer, { shadowColor: theme.primary }]}>
           <Pressable
             onPress={handleOpenCreate}
             accessibilityRole="button"
             accessibilityLabel="Agregar nueva contraseña"
+            style={({ pressed }) => [{
+              opacity: pressed ? 0.85 : 1,
+              transform: [{ scale: pressed ? 0.92 : 1 }],
+            }]}
           >
-            <Ionicons name="add" size={35} color={theme.primaryLight} />
+            <LinearGradient
+              colors={[theme.primary, theme.accent]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.fabGradient}
+            >
+              <Ionicons name="add" size={32} color="#FFFFFF" />
+            </LinearGradient>
           </Pressable>
         </View>
       )}
@@ -259,14 +270,30 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   filterChip: {
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginRight: 8,
+    borderRadius: 24,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+  },
+  gradientChipSelected: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   filterChipText: {
-    fontSize: 12,
+    fontSize: 13,
+    fontWeight: '500',
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'sans-serif',
+    letterSpacing: 0.3,
+  },
+  filterChipTextSelected: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 14,
   },
   listContent: {
     paddingHorizontal: 20,
@@ -302,14 +329,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 20,
-    borderRadius: 20,
+    borderRadius: 18,
     shadowOffset: { width: 0, height: 6 },
-    elevation: 8,
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
+    elevation: 10,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+  },
+  fabGradient: {
     width: 60,
     height: 60,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });
