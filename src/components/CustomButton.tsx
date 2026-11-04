@@ -21,6 +21,7 @@ interface CustomButtonProps {
   loading?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
+  containerStyle?: ViewStyle;
   textStyle?: TextStyle;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -34,6 +35,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   loading = false,
   disabled = false,
   style,
+  containerStyle,
   textStyle,
   size = 'md',
 }) => {
@@ -95,7 +97,14 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   const iconSize = size === 'sm' ? 16 : size === 'lg' ? 20 : 18;
 
   return (
-    <Animated.View style={[{ transform: [{ scale: scaleAnim }] }, disabled && styles.disabled]}>
+    <Animated.View
+      style={[
+        { transform: [{ scale: scaleAnim }] },
+        style?.flex !== undefined && { flex: style.flex },
+        disabled && styles.disabled,
+        containerStyle,
+      ]}
+    >
       <Pressable
         onPress={onPress}
         onPressIn={handlePressIn}

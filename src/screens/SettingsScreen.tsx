@@ -9,6 +9,10 @@ import {
   TextInput,
   Modal,
   Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeStore } from '../store/useThemeStore';
@@ -31,7 +35,20 @@ export const SettingsScreen: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [changingPass, setChangingPass] = useState(false);
+
+  const handleClosePasswordModal = () => {
+    setPasswordModalVisible(false);
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setShowOldPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
+  };
 
   const handleBiometricToggle = async (value: boolean) => {
     const success = await toggleBiometrics(value);
@@ -62,11 +79,8 @@ export const SettingsScreen: React.FC = () => {
     setChangingPass(false);
 
     if (success) {
-      Alert.alert('Éxito', 'Tu contraseña maestra ha sido actualizada y la bóveda se re-cifró.');
-      setPasswordModalVisible(false);
-      setOldPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+      Alert.alert('Éxito', 'Tu contraseña maestra ha sido actualizada y la bóveda se re-cifró correctamente.');
+      handleClosePasswordModal();
     } else {
       Alert.alert('Error', 'La contraseña actual ingresada es incorrecta.');
     }
@@ -214,62 +228,194 @@ export const SettingsScreen: React.FC = () => {
       {/* Modal para cambio de contraseña maestra */}
       <Modal
         visible={passwordModalVisible}
-        animationType="slide"
+        animationType="fade"
         transparent={true}
-        onRequestClose={() => setPasswordModalVisible(false)}
+        onRequestClose={handleClosePasswordModal}
       >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalCard, { backgroundColor: theme.card, borderColor: theme.border }]}>
-            <Text style={[styles.modalTitle, { color: theme.text }]}>
-              Cambiar Contraseña Maestra
-            </Text>
-            <Text style={[styles.modalDesc, { color: theme.textMuted }]}>
-              Tus credenciales guardadas se volverán a cifrar de forma segura con tu nueva clave.
-            </Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.modalOverlay}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalBackdrop}>
+              <View
+                style={[
+                  styles.modalCard,
+                  { backgroundColor: theme.card, borderColor: theme.border },
+                ]}
+              >
+                <ScrollView
+                  keyboardShouldPersistTaps="handled"
+                  showsVerticalScrollIndicator={false}
+                  bounces={false}
+                >
+                  {/* Encabezado del modal */}
+                  <View style={styles.modalHeaderRow}>
+                    <View
+                      style={[
+                        styles.iconBox,
+                        {
+                          backgroundColor: isDark
+                            ? theme.cardSecondary
+                            : theme.primaryLight,
+                        },
+                      ]}
+                    >
+                      <Ionicons name="key" size={20} color={theme.primary} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.modalTitle, { color: theme.text }]}>
+                        Cambiar Contraseña Maestra
+                      </Text>
+                      <Text style={[styles.modalDesc, { color: theme.textMuted }]}>
+                        Tus contraseñas se re-cifrarán con la nueva clave.
+                      </Text>
+                    </View>
+                  </View>
 
-            <TextInput
-              style={[styles.modalInput, { backgroundColor: theme.cardSecondary, color: theme.text, borderColor: theme.border }]}
-              placeholder="Contraseña maestra actual"
-              placeholderTextColor={theme.textMuted}
-              secureTextEntry
-              value={oldPassword}
-              onChangeText={setOldPassword}
-            />
+                  {/* Input 1: Contraseña actual */}
+                  <Text style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Contraseña actual
+                  </Text>
+                  <View
+                    style={[
+                      styles.inputContainer,
+                      {
+                        backgroundColor: theme.cardSecondary,
+                        borderColor: theme.border,
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={18}
+                      color={theme.textMuted}
+                      style={styles.inputLeadingIcon}
+                    />
+                    <TextInput
+                      style={[styles.inputField, { color: theme.text }]}
+                      placeholder="Ingresa tu contraseña actual"
+                      placeholderTextColor={theme.textMuted}
+                      secureTextEntry={!showOldPassword}
+                      value={oldPassword}
+                      onChangeText={setOldPassword}
+                      autoCapitalize="none"
+                    />
+                    <Pressable
+                      onPress={() => setShowOldPassword(!showOldPassword)}
+                      hitSlop={8}
+                    >
+                      <Ionicons
+                        name={showOldPassword ? 'eye-off-outline' : 'eye-outline'}
+                        size={18}
+                        color={theme.textMuted}
+                      />
+                    </Pressable>
+                  </View>
 
-            <TextInput
-              style={[styles.modalInput, { backgroundColor: theme.cardSecondary, color: theme.text, borderColor: theme.border }]}
-              placeholder="Nueva contraseña maestra (mín. 8 caracteres)"
-              placeholderTextColor={theme.textMuted}
-              secureTextEntry
-              value={newPassword}
-              onChangeText={setNewPassword}
-            />
+                  {/* Input 2: Nueva contraseña */}
+                  <Text style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Nueva contraseña maestra
+                  </Text>
+                  <View
+                    style={[
+                      styles.inputContainer,
+                      {
+                        backgroundColor: theme.cardSecondary,
+                        borderColor: theme.border,
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name="shield-outline"
+                      size={18}
+                      color={theme.primary}
+                      style={styles.inputLeadingIcon}
+                    />
+                    <TextInput
+                      style={[styles.inputField, { color: theme.text }]}
+                      placeholder="Mínimo 8 caracteres"
+                      placeholderTextColor={theme.textMuted}
+                      secureTextEntry={!showNewPassword}
+                      value={newPassword}
+                      onChangeText={setNewPassword}
+                      autoCapitalize="none"
+                    />
+                    <Pressable
+                      onPress={() => setShowNewPassword(!showNewPassword)}
+                      hitSlop={8}
+                    >
+                      <Ionicons
+                        name={showNewPassword ? 'eye-off-outline' : 'eye-outline'}
+                        size={18}
+                        color={theme.textMuted}
+                      />
+                    </Pressable>
+                  </View>
 
-            <TextInput
-              style={[styles.modalInput, { backgroundColor: theme.cardSecondary, color: theme.text, borderColor: theme.border }]}
-              placeholder="Confirmar nueva contraseña"
-              placeholderTextColor={theme.textMuted}
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
+                  {/* Input 3: Confirmar contraseña */}
+                  <Text style={[styles.inputLabel, { color: theme.textSecondary }]}>
+                    Confirmar nueva contraseña
+                  </Text>
+                  <View
+                    style={[
+                      styles.inputContainer,
+                      {
+                        backgroundColor: theme.cardSecondary,
+                        borderColor: theme.border,
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name="shield-checkmark-outline"
+                      size={18}
+                      color={theme.primary}
+                      style={styles.inputLeadingIcon}
+                    />
+                    <TextInput
+                      style={[styles.inputField, { color: theme.text }]}
+                      placeholder="Repite la nueva contraseña"
+                      placeholderTextColor={theme.textMuted}
+                      secureTextEntry={!showConfirmPassword}
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      autoCapitalize="none"
+                    />
+                    <Pressable
+                      onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                      hitSlop={8}
+                    >
+                      <Ionicons
+                        name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                        size={18}
+                        color={theme.textMuted}
+                      />
+                    </Pressable>
+                  </View>
 
-            <View style={styles.modalActions}>
-              <CustomButton
-                title="Cancelar"
-                onPress={() => setPasswordModalVisible(false)}
-                variant="ghost"
-                style={{ flex: 1, marginRight: 8 }}
-              />
-              <CustomButton
-                title="Actualizar"
-                onPress={handleChangePassword}
-                loading={changingPass}
-                style={{ flex: 1 }}
-              />
+                  {/* Botones de acción: Cancelar y Confirmar Cambio */}
+                  <View style={styles.modalActions}>
+                    <CustomButton
+                      title="Cancelar"
+                      onPress={handleClosePasswordModal}
+                      variant="secondary"
+                      containerStyle={{ flex: 1, marginRight: 8 }}
+                      style={{ flex: 1 }}
+                    />
+                    <CustomButton
+                      title="Confirmar Cambio"
+                      onPress={handleChangePassword}
+                      loading={changingPass}
+                      icon="checkmark-circle-outline"
+                      containerStyle={{ flex: 1.4 }}
+                      style={{ flex: 1 }}
+                    />
+                  </View>
+                </ScrollView>
+              </View>
             </View>
-          </View>
-        </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );
@@ -340,35 +486,60 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
+  },
+  modalBackdrop: {
+    flex: 1,
     backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
-    padding: 24,
+    padding: 20,
   },
   modalCard: {
     borderRadius: 22,
     borderWidth: 1,
-    padding: 22,
+    padding: 20,
+    maxHeight: '92%',
+  },
+  modalHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 14,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '700',
-    marginBottom: 6,
+    marginBottom: 2,
   },
   modalDesc: {
-    fontSize: 13,
-    lineHeight: 18,
-    marginBottom: 16,
+    fontSize: 12,
+    lineHeight: 16,
   },
-  modalInput: {
+  inputLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginBottom: 6,
+    marginTop: 10,
+    marginLeft: 2,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     height: 48,
     borderWidth: 1,
     borderRadius: 12,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
+  },
+  inputLeadingIcon: {
+    marginRight: 10,
+  },
+  inputField: {
+    flex: 1,
     fontSize: 14,
-    marginBottom: 12,
+    height: '100%',
   },
   modalActions: {
     flexDirection: 'row',
-    marginTop: 10,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 4,
   },
 });

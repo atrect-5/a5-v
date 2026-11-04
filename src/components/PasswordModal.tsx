@@ -286,15 +286,17 @@ export const PasswordModal: React.FC<PasswordModalProps> = ({
                   },
                 ]}
               >
-                <Ionicons
-                  name={showGeneratorOptions ? 'chevron-up' : 'sparkles'}
-                  size={14}
-                  color={theme.primary}
-                  style={{ marginRight: 4 }}
-                />
-                <Text style={[styles.actionLinkText, { color: theme.primary }]}>
-                  {showGeneratorOptions ? 'Ocultar opciones' : 'Generar contraseña'}
-                </Text>
+                <View style={styles.actionLinkContent}>
+                  <Ionicons
+                    name={showGeneratorOptions ? 'chevron-up' : 'sparkles'}
+                    size={14}
+                    color={theme.primary}
+                    style={{ marginRight: 4 }}
+                  />
+                  <Text style={[styles.actionLinkText, { color: theme.primary }]}>
+                    {showGeneratorOptions ? 'Ocultar opciones' : 'Generar contraseña'}
+                  </Text>
+                </View>
               </Pressable>
             </View>
 
@@ -687,11 +689,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   actionLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
+  },
+  actionLinkContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   actionLinkText: {
     fontSize: 12,

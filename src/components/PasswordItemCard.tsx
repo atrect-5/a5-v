@@ -139,15 +139,17 @@ export const PasswordItemCard: React.FC<PasswordItemCardProps> = ({ item, onPres
             { backgroundColor: isDark ? theme.border : theme.cardSecondary, opacity: pressed ? 0.7 : 1 },
           ]}
         >
-          <Ionicons
-            name={copiedUser ? 'checkmark' : 'person-outline'}
-            size={12}
-            color={copiedUser ? theme.success : theme.textSecondary}
-            style={{ marginRight: 4 }}
-          />
-          <Text style={[styles.copyUserText, { color: copiedUser ? theme.success : theme.textSecondary }]}>
-            {copiedUser ? 'Copiado' : 'Copiar usuario'}
-          </Text>
+          <View style={styles.copyUserContent}>
+            <Ionicons
+              name={copiedUser ? 'checkmark' : 'person-outline'}
+              size={12}
+              color={copiedUser ? theme.success : theme.textSecondary}
+              style={{ marginRight: 4 }}
+            />
+            <Text style={[styles.copyUserText, { color: copiedUser ? theme.success : theme.textSecondary }]}>
+              {copiedUser ? 'Copiado' : 'Copiar usuario'}
+            </Text>
+          </View>
         </Pressable>
       </View>
     </InteractiveCard>
@@ -235,17 +237,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    marginRight: 8,
   },
   expiryText: {
     fontSize: 11,
     fontWeight: '600',
   },
   copyUserBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
+    flexShrink: 0,
+  },
+  copyUserContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   copyUserText: {
     fontSize: 11,
