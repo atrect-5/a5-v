@@ -208,7 +208,7 @@ export const PasswordModal: React.FC<PasswordModalProps> = ({
         edges={['top', 'bottom']}
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardContainer}
         >
           {/* Cabecera del modal con botón Guardar directo arriba */}
@@ -597,7 +597,7 @@ export const PasswordModal: React.FC<PasswordModalProps> = ({
                 value={notes}
                 onChangeText={setNotes}
                 multiline
-                numberOfLines={3}
+                numberOfLines={5}
               />
             </View>
 
@@ -674,7 +674,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingBottom: 24,
+    paddingBottom: 40,
+    flexGrow: 1,
   },
   label: {
     fontSize: 13,
