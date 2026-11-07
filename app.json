@@ -5,14 +5,14 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icoa5.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png"
+        "backgroundColor": "#090714",
+        "foregroundImage": "./assets/icoa5.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.a5v"
@@ -22,7 +22,20 @@
     },
     "plugins": [
       "expo-secure-store",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F0F4F8",
+          "image": "./assets/splash-icon.png",
+          "dark": {
+            "backgroundColor": "#090714",
+            "image": "./assets/splash-icon.png"
+          },
+          "imageWidth": 200,
+          "resizeMode": "contain"
+        }
+      ]
     ]
   }
 }

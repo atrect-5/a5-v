@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import * as SplashScreen from 'expo-splash-screen';
+
+// Mantiene visible la pantalla de carga nativa hasta que los recursos y la bóveda estén listos
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 import { useVaultStore } from '../store/useVaultStore';
 import { useThemeStore } from '../store/useThemeStore';
@@ -20,17 +24,24 @@ export const AppNavigator: React.FC = () => {
   const { theme, isDark, initTheme } = useThemeStore();
 
   useEffect(() => {
-    initTheme();
-    checkInitialStatus();
+    async function prepare() {
+      try {
+        // Inicializa el tema y el estado de la bóveda de forma asíncrona
+        await Promise.all([initTheme(), checkInitialStatus()]);
+      } catch (e) {
+        console.warn('Error al preparar recursos iniciales:', e);
+      } finally {
+        // Oculta la pantalla splash con una transición suave
+        await SplashScreen.hideAsync().catch(() => {});
+      }
+    }
+
+    prepare();
   }, []);
 
-  // Pantalla de carga mientras se verifican credenciales y preferencias
+  // Mientras la bóveda y temas se inicializan, la Splash Screen nativa permanece visible
   if (isLoading) {
-    return (
-      <View style={[styles.loadingContainer, { backgroundColor: theme.background }]}>
-        <ActivityIndicator size="large" color={theme.primary} />
-      </View>
-    );
+    return null;
   }
 
   // Si la bóveda no está desbloqueada, mostramos la pantalla de autenticación
