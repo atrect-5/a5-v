@@ -21,7 +21,7 @@ import { HeaderBar } from '../components/HeaderBar';
 import { CustomButton } from '../components/CustomButton';
 
 export const SettingsScreen: React.FC = () => {
-  const { theme, isDark, toggleTheme, themeMode } = useThemeStore();
+  const { theme, isDark, themeMode, setThemeMode } = useThemeStore();
   const {
     canUseBiometrics,
     isBiometricsEnabled,
@@ -98,33 +98,144 @@ export const SettingsScreen: React.FC = () => {
         {/* Sección: Apariencia y Tema */}
         <Text style={[styles.sectionHeader, { color: theme.textSecondary }]}>APARIENCIA</Text>
         <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
-          <View style={styles.settingRow}>
+          {/* Opción 1: Sistema (Predeterminado) */}
+          <Pressable
+            onPress={() => setThemeMode('system')}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: themeMode === 'system' }}
+            accessibilityLabel="Tema del sistema"
+            style={({ pressed }) => [
+              styles.settingRow,
+              {
+                borderBottomWidth: 1,
+                borderBottomColor: theme.border,
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
             <View style={styles.settingInfo}>
-              <View style={[styles.iconBox, { backgroundColor: isDark ? theme.cardSecondary : theme.primaryLight }]}>
+              <View
+                style={[
+                  styles.iconBox,
+                  {
+                    backgroundColor:
+                      themeMode === 'system' ? theme.primaryLight : theme.cardSecondary,
+                  },
+                ]}
+              >
                 <Ionicons
-                  name={isDark ? 'moon' : 'sunny'}
+                  name="phone-portrait-outline"
                   size={20}
-                  color={theme.primary}
+                  color={themeMode === 'system' ? theme.primary : theme.textSecondary}
                 />
               </View>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={[styles.settingTitle, { color: theme.text }]}>
-                  {isDark ? 'Tema Oscuro' : 'Tema Claro'}
+                  Sistema (Predeterminado)
                 </Text>
                 <Text style={[styles.settingDesc, { color: theme.textMuted }]}>
-                  {isDark
-                    ? 'Paleta fría con tonos violeta y morado'
-                    : 'Paleta fría con tonos azul y pizarra'}
+                  Sigue automáticamente el tema de tu teléfono
                 </Text>
               </View>
+              <Ionicons
+                name={themeMode === 'system' ? 'radio-button-on' : 'radio-button-off'}
+                size={22}
+                color={themeMode === 'system' ? theme.primary : theme.border}
+              />
             </View>
-            <Switch
-              value={isDark}
-              onValueChange={toggleTheme}
-              trackColor={{ false: theme.cardSecondary, true: theme.primary }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
+          </Pressable>
+
+          {/* Opción 2: Oscuro */}
+          <Pressable
+            onPress={() => setThemeMode('dark')}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: themeMode === 'dark' }}
+            accessibilityLabel="Tema oscuro"
+            style={({ pressed }) => [
+              styles.settingRow,
+              {
+                borderBottomWidth: 1,
+                borderBottomColor: theme.border,
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <View style={styles.settingInfo}>
+              <View
+                style={[
+                  styles.iconBox,
+                  {
+                    backgroundColor:
+                      themeMode === 'dark' ? theme.primaryLight : theme.cardSecondary,
+                  },
+                ]}
+              >
+                <Ionicons
+                  name="moon"
+                  size={20}
+                  color={themeMode === 'dark' ? theme.primary : theme.textSecondary}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.settingTitle, { color: theme.text }]}>
+                  Oscuro
+                </Text>
+                <Text style={[styles.settingDesc, { color: theme.textMuted }]}>
+                  Paleta fría con tonos violeta y morado
+                </Text>
+              </View>
+              <Ionicons
+                name={themeMode === 'dark' ? 'radio-button-on' : 'radio-button-off'}
+                size={22}
+                color={themeMode === 'dark' ? theme.primary : theme.border}
+              />
+            </View>
+          </Pressable>
+
+          {/* Opción 3: Claro */}
+          <Pressable
+            onPress={() => setThemeMode('light')}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: themeMode === 'light' }}
+            accessibilityLabel="Tema claro"
+            style={({ pressed }) => [
+              styles.settingRow,
+              {
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}
+          >
+            <View style={styles.settingInfo}>
+              <View
+                style={[
+                  styles.iconBox,
+                  {
+                    backgroundColor:
+                      themeMode === 'light' ? theme.primaryLight : theme.cardSecondary,
+                  },
+                ]}
+              >
+                <Ionicons
+                  name="sunny"
+                  size={20}
+                  color={themeMode === 'light' ? theme.primary : theme.textSecondary}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.settingTitle, { color: theme.text }]}>
+                  Claro
+                </Text>
+                <Text style={[styles.settingDesc, { color: theme.textMuted }]}>
+                  Paleta fría con tonos azul y pizarra
+                </Text>
+              </View>
+              <Ionicons
+                name={themeMode === 'light' ? 'radio-button-on' : 'radio-button-off'}
+                size={22}
+                color={themeMode === 'light' ? theme.primary : theme.border}
+              />
+            </View>
+          </Pressable>
         </View>
 
         {/* Sección: Seguridad y Claves */}
@@ -223,10 +334,10 @@ export const SettingsScreen: React.FC = () => {
             icon="lock-closed"
           />
         </View>
-      </ScrollView>
+      </ScrollView >
 
       {/* Modal para cambio de contraseña maestra */}
-      <Modal
+      < Modal
         visible={passwordModalVisible}
         animationType="fade"
         transparent={true}
@@ -416,8 +527,8 @@ export const SettingsScreen: React.FC = () => {
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-      </Modal>
-    </View>
+      </Modal >
+    </View >
   );
 };
 
@@ -453,6 +564,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    paddingVertical: 8
   },
   iconBox: {
     width: 40,

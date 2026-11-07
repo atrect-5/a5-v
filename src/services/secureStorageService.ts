@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PasswordItem } from '../types';
+import { PasswordItem, ThemeMode } from '../types';
 import { CryptoService } from './cryptoService';
 
 /**
@@ -170,17 +170,17 @@ export class SecureStorageService {
   /**
    * Almacenamiento de preferencia de tema
    */
-  static async getStoredTheme(): Promise<'light' | 'dark' | null> {
+  static async getStoredTheme(): Promise<ThemeMode | null> {
     try {
       const theme = await AsyncStorage.getItem(STORAGE_KEYS.THEME_MODE);
-      if (theme === 'light' || theme === 'dark') return theme;
+      if (theme === 'system' || theme === 'light' || theme === 'dark') return theme;
       return null;
     } catch {
       return null;
     }
   }
 
-  static async setStoredTheme(theme: 'light' | 'dark'): Promise<void> {
+  static async setStoredTheme(theme: ThemeMode): Promise<void> {
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.THEME_MODE, theme);
     } catch (e) {

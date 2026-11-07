@@ -33,7 +33,7 @@ export interface PasswordEvaluationResult {
   crackTimeDisplay: string;
 }
 
-export type ThemeMode = 'light' | 'dark';
+export type ThemeMode = 'system' | 'light' | 'dark';
 
 export interface VaultStats {
   total: number;
