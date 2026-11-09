@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Pressable, Alert, Platform } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, Pressable, Platform } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,8 +9,8 @@ import { PasswordItem } from '../types';
 import { HeaderBar } from '../components/HeaderBar';
 import { PasswordItemCard } from '../components/PasswordItemCard';
 import { PasswordModal } from '../components/PasswordModal';
+import { PasswordDetailModal } from '../components/PasswordDetailModal';
 import { CustomButton } from '../components/CustomButton';
-import { colors } from '@/theme/colors';
 
 export const VaultScreen: React.FC = () => {
   const { theme, isDark } = useThemeStore();
@@ -28,6 +28,8 @@ export const VaultScreen: React.FC = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editingItem, setEditingItem] = useState<PasswordItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<PasswordItem | null>(null);
+  const [detailModalVisible, setDetailModalVisible] = useState(false);
 
   const filteredPasswords = getFilteredPasswords();
   const stats = getVaultStats();
@@ -46,43 +48,9 @@ export const VaultScreen: React.FC = () => {
     setModalVisible(true);
   };
 
-  const handleOpenEdit = (item: PasswordItem) => {
-    Alert.alert(
-      item.serviceName,
-      `Usuario: ${item.username}\nCreado: ${new Date(item.createdAt).toLocaleDateString()}\nNotas: ${item.notes || 'Sin notas'}`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: () => confirmDelete(item),
-        },
-        {
-          text: 'Editar',
-          onPress: () => {
-            setEditingItem(item);
-            setModalVisible(true);
-          },
-        },
-      ]
-    );
-  };
-
-  const confirmDelete = (item: PasswordItem) => {
-    Alert.alert(
-      '¿Eliminar contraseña?',
-      `Esta acción borrará permanentemente las credenciales de "${item.serviceName}".`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: async () => {
-            await deletePassword(item.id);
-          },
-        },
-      ]
-    );
+  const handleOpenItem = (item: PasswordItem) => {
+    setSelectedItem(item);
+    setDetailModalVisible(true);
   };
 
   const handleSavePassword = async (itemData: {
@@ -178,7 +146,7 @@ export const VaultScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
-          <PasswordItemCard item={item} onPress={() => handleOpenEdit(item)} />
+          <PasswordItemCard item={item} onPress={() => handleOpenItem(item)} />
         )}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
@@ -234,6 +202,22 @@ export const VaultScreen: React.FC = () => {
           </Pressable>
         </View>
       )}
+
+      {/* Modal de detalle y acciones estilizado */}
+      <PasswordDetailModal
+        visible={detailModalVisible}
+        item={selectedItem}
+        onClose={() => setDetailModalVisible(false)}
+        onEdit={(item) => {
+          setDetailModalVisible(false);
+          setEditingItem(item);
+          setModalVisible(true);
+        }}
+        onDelete={async (item) => {
+          setDetailModalVisible(false);
+          await deletePassword(item.id);
+        }}
+      />
 
       {/* Modal para crear o editar */}
       <PasswordModal
