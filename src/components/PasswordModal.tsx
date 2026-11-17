@@ -194,6 +194,7 @@ export const PasswordModal: React.FC<PasswordModalProps> = ({
     { id: 'email', label: 'Email', icon: 'mail-outline' },
     { id: 'work', label: 'Trabajo', icon: 'briefcase-outline' },
     { id: 'finance', label: 'Finanzas', icon: 'card-outline' },
+    { id: 'entertainment', label: 'Entretenimiento', icon: 'film-outline' }
   ];
 
   return (
@@ -211,7 +212,7 @@ export const PasswordModal: React.FC<PasswordModalProps> = ({
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardContainer}
         >
-          {/* Cabecera del modal con botón Guardar directo arriba */}
+          {/* Cabecera del modal */}
           <View style={[styles.header, { borderBottomColor: theme.border, backgroundColor: theme.card }]}>
             <Pressable
               onPress={onClose}

@@ -11,7 +11,7 @@ export interface PasswordItem {
   createdAt: string;   // Fecha de creación en formato ISO
   updatedAt: string;   // Fecha de actualización en formato ISO
   recommendedChangeDate: string; // Fecha recomendada de cambio de contraseña en formato ISO
-  category?: 'general' | 'social' | 'email' | 'work' | 'finance'; // Categoría opcional para organización
+  category?: 'general' | 'social' | 'email' | 'work' | 'finance' | 'entertainment'; // Categoría opcional para organización
 }
 
 export interface PasswordGeneratorOptions {

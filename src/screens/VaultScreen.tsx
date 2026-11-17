@@ -41,6 +41,7 @@ export const VaultScreen: React.FC = () => {
     { id: 'email', label: 'Email' },
     { id: 'work', label: 'Trabajo' },
     { id: 'finance', label: 'Finanzas' },
+    { id: 'entertainment', label: 'Entretenimiento' }
   ];
 
   const handleOpenCreate = () => {
