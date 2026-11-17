@@ -346,22 +346,31 @@ export const PasswordDetailModal: React.FC<PasswordDetailModalProps> = ({
               </ScrollView>
 
               {/* Botones de acción inferiores */}
-              <View style={styles.actionButtonsContainer}>
+              <View style={styles.actionButtonsContainerCol}>
+                <View style={styles.actionButtonsContainerRow}>
+
+                  <CustomButton
+                    title='Editar'
+                    icon='pencil-outline'
+                    onPress={() => onEdit(item)}
+                    variant='primary'
+                    containerStyle={{ flex: 1 }}
+                  />
+
+                  <CustomButton
+                    title='Eliminar'
+                    icon='trash-outline'
+                    onPress={() => setIsConfirmingDelete(true)}
+                    variant='danger'
+                    containerStyle={{ flex: 1 }}
+                  />
+
+                </View>
 
                 <CustomButton
-                  title='Editar clave'
-                  icon='pencil-outline'
-                  onPress={() => onEdit(item)}
-                  variant='primary'
-                  containerStyle={{ flex: 1 }}
-                />
-
-                <CustomButton
-                  title='Eliminar'
-                  icon='trash-outline'
-                  onPress={() => setIsConfirmingDelete(true)}
-                  variant='danger'
-                  containerStyle={{ flex: 1 }}
+                  title='Cancelar'
+                  onPress={onClose}
+                  variant='secondary'
                 />
               </View>
             </>
@@ -565,8 +574,13 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginTop: 6,
   },
-  actionButtonsContainer: {
+  actionButtonsContainerRow: {
     flexDirection: 'row',
+    gap: 12,
+    marginTop: 14,
+  },
+  actionButtonsContainerCol: {
+    flexDirection: 'column',
     gap: 12,
     marginTop: 14,
   },
