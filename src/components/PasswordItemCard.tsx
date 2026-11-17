@@ -64,13 +64,23 @@ export const PasswordItemCard: React.FC<PasswordItemCardProps> = ({ item, onPres
         </View>
 
         {/* Badge de seguridad */}
-        <View style={[styles.scoreBadge, { backgroundColor: evaluation.color + '20' }]}>
-          <View style={[styles.scoreDot, { backgroundColor: evaluation.color }]} />
-          <Text style={[styles.scoreBadgeText, { color: evaluation.color }]}>
-            {evaluation.label}
-          </Text>
+        <View style={styles.infoSecurityCategory}>
+          {item.category && (
+            <View style={[styles.categoryBadge, { backgroundColor: theme.cardSecondary }]}>
+              <Text style={[styles.categoryText, { color: theme.primary }]}>
+                {item.category.toUpperCase()}
+              </Text>
+            </View>
+          )}
+          <View style={[styles.scoreBadge, { backgroundColor: evaluation.color + '20' }]}>
+            <View style={[styles.scoreDot, { backgroundColor: evaluation.color }]} />
+            <Text style={[styles.scoreBadgeText, { color: evaluation.color }]}>
+              {evaluation.label}
+            </Text>
+          </View>
         </View>
       </View>
+
 
       {/* Contraseña oculta / visible */}
       <View style={[styles.passwordBox, { backgroundColor: theme.cardSecondary }]}>
@@ -204,6 +214,21 @@ const styles = StyleSheet.create({
   scoreBadgeText: {
     fontSize: 11,
     fontWeight: '700',
+  },
+  categoryBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+    marginBottom: 4,
+  },
+  categoryText: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  infoSecurityCategory: {
+    flexDirection: 'column',
+    alignItems: 'flex-end'
   },
   passwordBox: {
     flexDirection: 'row',
